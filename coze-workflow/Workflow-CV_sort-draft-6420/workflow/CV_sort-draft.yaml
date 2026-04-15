@@ -1,0 +1,469 @@
+schema_version: 1.0.0
+name: CV_sort
+id: 7608472336376283187
+description: "简历筛选工作流\n智能简历筛选工作流，自动化处理简历，高效匹配人才"
+mode: workflow
+icon: plugin_icon/workflow.png
+nodes:
+    - id: "100001"
+      type: start
+      title: 开始
+      icon: https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Start-v2.jpg
+      description: "工作流的起始节点，用于设定启动工作流需要的信息"
+      position:
+        x: -1213.4810981209496
+        y: 337.4996332416232
+      parameters:
+        node_outputs:
+            input:
+                type: file
+                required: true
+                value: null
+    - id: "900001"
+      type: end
+      title: 结束
+      icon: https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-End-v2.jpg
+      description: "工作流的最终节点，用于返回工作流运行后的结果信息"
+      position:
+        x: 1308.7289132524263
+        y: 31.92117924202546
+      parameters:
+        node_inputs:
+            - name: reasoning_content
+              input:
+                type: string
+                value:
+                    path: output
+                    ref_node: "171805"
+        terminatePlan: returnVariables
+    - id: "171805"
+      type: llm
+      title: 大模型
+      icon: https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-LLM-v2.jpg
+      description: "调用大语言模型,使用变量和提示词生成回复"
+      version: "3"
+      position:
+        x: 821.2500775738133
+        y: 43.979897398256426
+      parameters:
+        fcParam:
+            llmNodeUID: ""
+            pluginFCParam: {}
+            spaceID: ""
+            workflowVersion: ""
+        fcParamVar:
+            knowledgeFCParam: {}
+        llmParam:
+            - name: apiMode
+              input:
+                type: integer
+                value: "0"
+            - name: temperature
+              input:
+                type: float
+                value: "0.5"
+            - name: topP
+              input:
+                type: float
+                value: "1"
+            - name: frequencyPenalty
+              input:
+                type: float
+                value: "0"
+            - name: maxTokens
+              input:
+                type: integer
+                value: "4096"
+            - name: spCurrentTime
+              input:
+                type: boolean
+                value: false
+            - name: spAntiLeak
+              input:
+                type: boolean
+                value: false
+            - name: thinkingType
+              input:
+                type: string
+                value: enabled
+            - name: responseFormat
+              input:
+                type: integer
+                value: "2"
+            - name: modelName
+              input:
+                type: string
+                value: 豆包·1.8·深度思考
+            - name: modelType
+              input:
+                type: integer
+                value: "1768187121"
+            - name: generationDiversity
+              input:
+                type: string
+                value: balance
+            - name: parameters
+              input:
+                type: object
+                properties:
+                    max_completion_tokens:
+                        type: integer
+                        value: "0"
+                    reasoning_effort:
+                        type: string
+                        value: medium
+                value: null
+            - name: prompt
+              input:
+                type: string
+                value: '{{input}}'
+            - name: enableChatHistory
+              input:
+                type: boolean
+                value: false
+            - name: chatHistoryRound
+              input:
+                type: integer
+                value: "3"
+            - name: systemPrompt
+              input:
+                type: string
+                value: |-
+                    # Role: 资深求职简历优化专家 & 职场竞争力分析师
+
+                    ## Profile
+                    - **背景:** 你拥有 10 年以上世界 500 强企业 HR 经验及顶级猎头公司背景，阅历过上万份简历。你深谙各类求职场景（校招、社招、跨行跳槽），精通 ATS（候选人追踪系统）的简历筛选算法。
+                    - **专长:** 敏锐识别候选人经历中的闪光点，精通“STAR法则”和“XYZ成就公式”（在X背景下，做了Y事情，达成了Z结果），擅长将平庸的描述转化为具有强商业价值和结果导向的专业表达。
+                    - **语气:** 专业、犀利、客观、鼓励。不讲废话，直击痛点，提供极具可操作性的修改建议。
+
+                    ## Core Objectives
+                    1. **精准匹配:** 深度拆解目标岗位描述（JD），提取核心关键词、硬技能与软实力需求。
+                    2. **深度诊断:** 对照 JD 审查初始简历，指出致命弱点、逻辑漏洞及表达冗余。
+                    3. **高维重构:** 运用专业方法论重写经历，提升专业度，确保符合 ATS 解析逻辑。
+                    4. **排版建议:** 提供清晰的视觉层级和模块划分建议。
+
+                    ## Methodology (修改方法论)
+                    - **STAR 法则重构:** - Situation (情景): 任务背景或面临的挑战。
+                      - Task (任务): 具体目标或承担的职责。
+                      - Action (行动): 采取的核心动作、使用的工具/方法（多用强动词）。
+                      - Result (结果): 可量化的数据收益或业务影响（如转化率提升、成本降低）。
+                    - **动词前置:** 句首必须使用强有力的行为动词（如：主导、搭建、优化、重构、策划）。
+                    - **去冗存真:** 剔除主观形容词（如“工作努力”、“沟通能力强”），全部用客观事实和数据替代。
+
+                    ## Workflow (工作流)
+                    当你接收到用户的【目标岗位 JD】和【初始简历内容】后，请严格按照以下 4 个步骤输出：
+
+                    ### Step 1: 岗位核心痛点解析 (JD 拆解)
+                    - 提炼该岗位的 3-5 个核心胜任力要求。
+                    - 列出简历中必须出现的隐性/显性关键词（供 ATS 抓取）。
+
+                    ### Step 2: 简历全科诊断 (痛点直击)
+                    - **匹配度评分:** 给出当前简历与 JD 的匹配度百分比（0-100%）。
+                    - **红牌警告:** 指出当前简历中可能导致被直接淘汰的 1-3 个致命问题（如经历无结果、描述太散、格式杂乱）。
+                    - **潜力挖掘:** 圈出简历中被埋没、但极其契合岗位的“高光经历”。
+
+                    ### Step 3: 逐条重构与精修 (核心交付)
+                    对比修改前后的内容，采用对比表格或清晰的段落呈现。对于每一段重要经历：
+                    - **修改前:** [用户原话]
+                    - **修改后:** [运用 STAR 法则和业务话术重写后的金句]
+                    - **重写逻辑:** [简述为什么要这样改，突出了什么能力]
+                    *(注意：如果用户原经历缺少数据支撑，请在修改后标出 `[请在此补充具体数据]` 的占位符，并提示用户需要回忆哪方面的数据。)*
+
+                    ### Step 4: 简历模块优化与高阶建议
+                    - 提出整体模块排版建议（如：是否需要将“项目经历”提至“教育背景”之前）。
+                    - 针对面试可能会被深挖的简历薄弱点，提供 1-2 个防御性建议。
+
+                    ## Constraints & Rules
+                    - 绝对禁止编造用户没有做过的经历或虚假数据。
+                    - 语言风格必须是高度职业化的书面语，杜绝口语化。
+                    - 任何重写的句子都应精简有力，避免长篇大论，适合 HR 在 10 秒内扫视抓取重点。
+            - name: stableSystemPrompt
+              input:
+                type: string
+                value: ""
+            - name: canContinue
+              input:
+                type: boolean
+                value: true
+            - name: loopPromptVersion
+              input:
+                type: string
+                value: ""
+            - name: loopPromptName
+              input:
+                type: string
+                value: ""
+            - name: loopPromptId
+              input:
+                type: string
+                value: ""
+        node_inputs:
+            - name: input
+              input:
+                type: string
+                value:
+                    path: output
+                    ref_node: "196403"
+        node_outputs:
+            output:
+                type: string
+                value: null
+            reasoning_content:
+                type: string
+                value: null
+        settingOnError:
+            processType: 1
+            retryTimes: 0
+            switch: false
+            timeoutMs: 180000
+    - id: "196403"
+      type: llm
+      title: 大模型_1
+      icon: https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-LLM-v2.jpg
+      description: "调用大语言模型,使用变量和提示词生成回复"
+      version: "3"
+      position:
+        x: 230.76365538250883
+        y: 82.97989739825643
+      parameters:
+        fcParam:
+            llmNodeUID: ""
+            pluginFCParam: {}
+            spaceID: ""
+            workflowVersion: ""
+        fcParamVar:
+            knowledgeFCParam: {}
+        llmParam:
+            - name: apiMode
+              input:
+                type: integer
+                value: "0"
+            - name: maxTokens
+              input:
+                type: integer
+                value: "2200"
+            - name: spCurrentTime
+              input:
+                type: boolean
+                value: false
+            - name: spAntiLeak
+              input:
+                type: boolean
+                value: false
+            - name: thinkingType
+              input:
+                type: string
+                value: disabled
+            - name: responseFormat
+              input:
+                type: integer
+                value: "2"
+            - name: modelName
+              input:
+                type: string
+                value: DeepSeek-V3.2
+            - name: modelType
+              input:
+                type: integer
+                value: "1764929611"
+            - name: generationDiversity
+              input:
+                type: string
+                value: balance
+            - name: parameters
+              input:
+                type: object
+                value: null
+            - name: prompt
+              input:
+                type: string
+                value: '{{input}}'
+            - name: enableChatHistory
+              input:
+                type: boolean
+                value: false
+            - name: chatHistoryRound
+              input:
+                type: integer
+                value: "3"
+            - name: systemPrompt
+              input:
+                type: string
+                value: |-
+                    # Role: 高级 OCR 文本重构与排版专家 (OCR Text Restoration Specialist)
+
+                    ## Profile
+                    - **背景:** 你是一位拥有极致“文字洁癖”的资深编辑与文档工程师。你深谙各类文档（从严谨的学术论文、PRD产品文档，到古典文学诗集）的排版规范。
+                    - **专长:** 精通中英文混排规范、Markdown 语法重构。擅长通过上下文语义，精准修复 OCR（光学字符识别）产生的错字、漏字、多余换行、以及标点符号混乱。
+                    - **目标:** 将杂乱无章、支离破碎的 OCR 原始文本，转化为语义连贯、格式优美、可直接发布或存档的高质量 Markdown 文档。
+
+                    ## Core Objectives & Rules (核心规则)
+
+                    在处理用户输入的 OCR 文本时，你必须严格遵守以下 4 条底线：
+
+                    ### 1. 结构与断句修复 (Layout & Line Break)
+                    - **消除硬回车:** 自动识别并删除因 PDF/图片物理换行导致的段落内错误回车。只有在语义确实需要另起一段时，才保留换行。
+                    - **层级重建:** 根据文本的逻辑结构（如“1.”、“一、”、“首先”或字体大小的暗示），自动为其添加适当的 Markdown 标题层级（# / ## / ###）和列表样式（- / *）。
+
+                    ### 2. 标点与中英混排规范 (Typography Standards)
+                    - **盘古之白:** 在中文与英文单词、中文与阿拉伯数字之间，**必须**增加一个半角空格。（例如：“使用AI工具” -> “使用 AI 工具”）。
+                    - **全半角规范:** 中文语境下统一使用全角标点（，。！？：；“”）；英文和代码语境下使用半角标点。
+                    - **符号修复:** 修复 OCR 常将 `1` 识别为 `l`，`0` 识别为 `O`，`,` 识别为 `.` 等视觉相似错误。
+
+                    ### 3. 专业领域特异性修复 (Domain-Specific Handling)
+                    - **古文与诗词:** 结合上下文语境，修复古文中易被识别错的生僻字或繁体字。保持诗句应有的换行与对仗美感。
+                    - **数学与学术公式:** 敏锐识别被 OCR 破坏的公式残片（如乱码的积分符号、生成函数等），并尽可能将其还原为标准的 LaTeX 格式（行内公式使用 `$inline$`，独立公式使用 `$$display$$` 规范）。
+                    - **代码与专有名词:** 确保技术栈名称（如 Python、LaTeX、Gemini）拼写正确及大小写规范。
+
+                    ### 4. 忠于原意 (Fidelity)
+                    - 你的任务是“修复”而非“重写”。绝不要擅自增加原文中不存在的观点或大段删减内容。遇到无法确定的乱码，可以在修正后的词语旁用 `[?]` 标注。
+
+                    ## Workflow (工作流)
+                    1. **静默分析:** 快速扫描文本，判断其体裁（如：文章、列表、代码、诗歌）和主要错误类型。
+                    2. **执行重构:** 按照上述规则进行清洗、修复和排版。
+                    3. **输出结果:** 直接输出修复后的完整 Markdown 文本，无需解释修改过程（除非遇到大量无法确定的歧义内容，可在文末简要说明）。
+            - name: stableSystemPrompt
+              input:
+                type: string
+                value: ""
+            - name: canContinue
+              input:
+                type: boolean
+                value: false
+            - name: loopPromptVersion
+              input:
+                type: string
+                value: ""
+            - name: loopPromptName
+              input:
+                type: string
+                value: ""
+            - name: loopPromptId
+              input:
+                type: string
+                value: ""
+        node_inputs:
+            - name: input
+              input:
+                type: list
+                items:
+                    type: string
+                    value: null
+                value:
+                    path: data.line_texts
+                    ref_node: "131168"
+        node_outputs:
+            output:
+                type: string
+                value: null
+        settingOnError:
+            processType: 1
+            retryTimes: 0
+            switch: false
+            timeoutMs: 180000
+    - id: "131168"
+      type: plugin
+      title: general_ocr
+      icon: https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Plugin-v2.jpg
+      description: "通用文字识别服务提供「从图片到文字」的完整解决方案，可识别中英文内容，不仅在高并发环境下以毫秒级的速度进行识别，还可精准识别截图、扫描、拍照、视频抽帧等多类型图片。"
+      position:
+        x: -227.20451304866572
+        y: 98.95906215445105
+      parameters:
+        apiParam:
+            - name: apiID
+              input:
+                type: string
+                value: "7454457295544778786"
+            - name: apiName
+              input:
+                type: string
+                value: "general_ocr"
+            - name: pluginID
+              input:
+                type: string
+                value: "7454457295544762402"
+            - name: pluginName
+              input:
+                type: string
+                value: "OCR火山版"
+            - name: pluginVersion
+              input:
+                type: string
+                value: ""
+            - name: tips
+              input:
+                type: string
+                value: ""
+            - name: outDocLink
+              input:
+                type: string
+                value: ""
+        node_inputs:
+            - name: url
+              input:
+                value:
+                    path: input
+                    ref_node: "100001"
+        node_outputs:
+            code:
+                type: float
+                value: null
+                description: 错误码
+            data:
+                type: object
+                properties:
+                    line_rects:
+                        type: list
+                        items:
+                            type: object
+                            properties:
+                                height:
+                                    type: float
+                                    value: null
+                                    description: 宽
+                                width:
+                                    type: float
+                                    value: null
+                                    description: 长
+                                x:
+                                    type: float
+                                    value: null
+                                    description: x轴坐标
+                                "y":
+                                    type: float
+                                    value: null
+                                    description: y轴坐标
+                            value: null
+                        value: null
+                        description: "文本行位置\t"
+                    line_texts:
+                        type: list
+                        items:
+                            type: string
+                            value: null
+                        value: null
+                        description: "识别结果\t"
+                value: null
+                description: 识别结果
+            log_id:
+                type: string
+                value: null
+                description: 日志id
+            msg:
+                type: string
+                value: null
+                description: 错误信息
+        settingOnError:
+            processType: 1
+            retryTimes: 0
+            timeoutMs: 180000
+edges:
+    - source_node: "100001"
+      target_node: "131168"
+    - source_node: "171805"
+      target_node: "900001"
+    - source_node: "196403"
+      target_node: "171805"
+    - source_node: "131168"
+      target_node: "196403"

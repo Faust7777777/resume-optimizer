@@ -1,0 +1,13 @@
+type: Workflow
+version: 1.0.0
+main:
+    id: 7608472336376283187
+    name: CV_sort
+    desc: |-
+        简历筛选工作流
+        智能简历筛选工作流，自动化处理简历，高效匹配人才
+    icon: plugin_icon/workflow.png
+    version: ""
+    flowMode: 0
+    commitId: ""
+sub: []
