@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Resume Optimizer
 
-## Getting Started
+这是一个面向求职场景的 AI 简历优化原型。它要碰的，其实是求职准备里几处很常见的卡点。很多人改简历时，先是不知道问题出在哪，接着不知道目标岗位看重什么，到了动笔那一步，又常常写不清自己的经历。简历改完以后，面试准备往往还是空着。这个项目就从这里起步，先把最要紧的几步跑通。
 
-First, run the development server:
+## 项目
+
+这个项目是我受托开发的一套比赛类网站原型，我负责需求收拢、功能安排、页面与接口实现，以及 AI 能力接入。起手没有急着堆页面，我先把用户真正会遇到的卡点排了个先后次序，再决定哪些功能该先落地。
+
+现在仓库里已经能跑起来的部分，主要有简历诊断、岗位理解、内容优化、经历生成、模拟面试，以及本地历史记录。顺着用户使用过程去看，这几块刚好能接成一条线。用户先知道自己的简历哪里有问题，再去看目标岗位要什么，再改内容，再补经历，最后把面试准备接上。我最后留下这条顺序，是因为它至少能把用户从“看不清问题”一路推到“开始准备面试”，中间不断线。
+
+当时列功能清单时，我把它分成了两层。第一层，是我觉得必须先做出来的部分，因为这些东西一上线，用户就能立刻感觉到它有没有用。第二层，才是后面继续补的东西，比如更完整的岗位匹配、行业化模板、报告展示、云端存储和正式部署。仓库里的这版，就是把前面这层先立住。
+
+数据来源也比较直接。用户会输入简历文本、上传文件、填写目标岗位 JD；系统运行时会生成诊断结果、优化结果、面试记录和本地历史状态；开发和演示阶段还会用到一部分测试样例；最后一类，是 Coze 工作流和智能体根据用户输入生成的内容。现阶段它还不是一个靠自建数据库支撑的大系统，主要还是“用户输入 + AI 处理 + 本地状态”这一路。
+
+如果按现在的完成度来讲，这一版适合被看成一个已经跑通核心流程的产品原型。主线已经有了，账号体系、正式数据库、更完整的岗位匹配，还有云端部署，还在后面。
+
+## 开发
+
+这个项目里，我先做的其实不是写代码。我先把用户会遇到的问题、功能先后次序和最小可用范围想清楚，再把这些内容写成文档，后面的页面、接口和 AI 流程都照着这条线往下走。对我来说，开发只是后半段，前半段是先把需求、范围和优先级理清楚。
+
+执行时我用了 GitHub Copilot 和 Claude Code。它们主要帮我提速，让页面、组件和接口落地得更快；真正决定做什么、先做什么、哪些先不做的，还是前面的判断。整个过程更接近一种按需求文档推进的 spec-coding。
+
+AI 这一层，我接的是 Coze 的工作流和智能体。这两部分也不是现成拿来就能用，我得按业务要求自己去试、去改，把整套流程调通。
+
+我如今大一，在大连理工大学读电子商务，也希望以后往互联网产品经理这条路继续走。所以这个仓库对我来说，价值不只在代码本身，也在于它留下了我怎样想问题、怎样排优先级、怎样把需求一步步落成产品的过程。
+
+## 使用
+
+技术上，这个项目目前用的是 Next.js、React、TypeScript、Tailwind CSS、shadcn/ui、Zustand，还有 Coze 的 workflow 和 bot。目录也比较直接，`app` 放页面和 API 路由，`components` 放业务模块和 UI 组件，`store` 放状态管理，`lib` 放 AI 调用和通用工具，`coze-worker.mjs` 负责工作流辅助处理。
+
+本地运行时，先安装依赖：
+
+```bash
+npm install
+```
+
+再启动开发环境：
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+默认访问地址是 `http://localhost:3000`。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+环境变量建议先从 `.env.local.example` 复制出一份 `.env.local`。最小可用配置通常包括下面这些：
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+AI_PROVIDER=coze
+COZE_API_TOKEN=your_coze_token
+COZE_API_BASE_URL=https://api.coze.cn
+COZE_WORKFLOW_URL=your_workflow_url
+COZE_WORKFLOW_ID=your_workflow_id
+COZE_WORKFLOW_FILE_PARAM=input
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+如果你的工作流参数名跟默认值不一样，再补 `COZE_WORKFLOW_TEXT_PARAM`、`COZE_WORKFLOW_JOB_PARAM` 这些变量就可以。
